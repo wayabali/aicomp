@@ -1,22 +1,26 @@
-
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import AdminDashboard from './pages/AdminDashboard';
-import AnalyticsPage from './pages/AnalyticsPage';
-import NavigationBar from './components/NavigationBar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
+import Layout from './components/Layout';
+import Tickets from './pages/Tickets';
 
 const App = () => {
   return (
     <Router>
-      <div>
-        <NavigationBar />
-        <Routes>
-          <Route path="/AdminDashboard" element={<AdminDashboard />} />
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/analytics" element={<AnalyticsPage />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/Login" element={<LoginPage />} />
+        
+        <Route
+          path="/*"
+          element={
+            <Layout>
+              <Routes>
+                <Route path="/Tickets" element={<Tickets />} />
+              </Routes>
+            </Layout>
+          }
+        />
+      </Routes>
     </Router>
   );
 };
