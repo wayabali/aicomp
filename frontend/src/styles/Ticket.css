@@ -1,0 +1,37 @@
+body{
+  background: radial-gradient(circle, #F4F4F4 0%, #F3E4FF 100%);  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.ticket-container{
+  display:grid;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  height: 100vh;
+  text-align: center;
+}
+.ticket-container  h1{
+  font-style:initial;
+  font-size: 36px;
+  font-weight: bold;
+  font-family:Arial, Helvetica, sans-serif ;
+}
+.number-container{
+  background: radial-gradient(circle, #F4F4F4 0%, #F3E4FF 100%);  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  border-radius: 50%;
+  color: rgb(0, 0, 0);
+  width: 180px;
+  box-shadow:#D9D9D9;
+ justify-items: center;
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.number{
+  color: rgb(0, 0, 0);
+  width: fit-content;
+  font-size: 55px;
+  box-shadow:#D9D9D9;
+}
+.informations{
+  text-align: start;
+  font-size: 25px;
+font-family: sans-serif;}

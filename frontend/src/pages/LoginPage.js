@@ -4,7 +4,7 @@ import { loginAdmin } from '../api/api';
 import '../styles/LoginPage.css';
 import imagesystem from '../styles/system.png';
 import baridilogo from '../styles/baridi.png';
-
+              
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,6 +24,7 @@ const LoginPage = () => {
   };
 
   return (
+    <div className='body-login'>
     <div className="login-container">
       <div className="login-card">
         <div className="login-left">
@@ -64,6 +65,7 @@ const LoginPage = () => {
           <h2>Ticket system</h2>
         </div>
       </div>
+    </div>
     </div>
   );
 };
