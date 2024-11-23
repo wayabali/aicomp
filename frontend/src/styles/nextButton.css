@@ -1,0 +1,34 @@
+.nextButton{
+  background-color: #F4C533;
+  color: white;
+  width: 200px;
+  border: none;
+  height: 50px;
+  border-radius: 5px;
+  margin: 60px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.nextButton:hover{
+  background-color:#e4af10;
+  color: #ffffff;
+  transition: 1s;
+
+}
+.PreceButton{
+  background-color: #2665AB;
+  color: white;
+  width: 200px;
+  border: none;
+  height: 50px;
+  border-radius: 5px;
+  margin: 60px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.PreceButton:hover{
+  background-color: #0f70df;
+  color: white;
+  transition: 1s;
+}
+
