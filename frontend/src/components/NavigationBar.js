@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../utils/auth';
 import { logoutAdmin } from '../api/api';
-import baridi from '../styles/baridi.png';
+import baridi from '../styles/baridi.png'
 import '../styles/NavigationBar.css';
 
 const getUserRole = () => {
-  return localStorage.getItem('userRole'); // Retrieve user role from localStorage
+  return localStorage.getItem('userRole');   // Fares badlha alahsab databse manba3d
 };
 
 const NavigationBar = () => {
@@ -27,38 +27,30 @@ const NavigationBar = () => {
 
   return (
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-      {/* Sidebar Toggle Button */}
       <button className="menu-button" onClick={toggleSidebar}>
         ☰
       </button>
-
-      {/* Sidebar Content */}
       <div className="sidebar-content">
-        {/* Logo Section */}
+     
         <div className="logo-section">
           <img
-            src={baridi}
+            src={baridi} 
             alt="Algerie Poste Logo"
             className="sidebar-logo"
           />
         </div>
 
-        {/* Navigation Links */}
+        
         <ul className="sidebar-links">
           {isAuthenticated() && (
             <>
               <li>
-                <Link to="/tickets">
+                <Link to="/">
                   <i className="fas fa-home"></i> Tickets
                 </Link>
               </li>
               {role === 'admin' && (
                 <>
-                  <li>
-                    <Link to="/dashboard">
-                      <i className="fas fa-tachometer-alt"></i> Dashboard
-                    </Link>
-                  </li>
                   <li>
                     <Link to="/analytics">
                       <i className="fas fa-chart-bar"></i> Statistiques
@@ -75,7 +67,7 @@ const NavigationBar = () => {
           )}
         </ul>
 
-        {/* Logout Button */}
+        
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
