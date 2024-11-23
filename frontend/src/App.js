@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Layout from './components/Layout';
 import Tickets from './pages/Tickets';
+import DashboardPage from './pages/DashboardPage';
 
 const App = () => {
   return (
@@ -20,6 +21,15 @@ const App = () => {
             </Layout>
           }
         />
+        <Route
+          path="/dashboard"
+          element={
+         
+            <DashboardPage />
+         
+      }
+     />
+
       </Routes>
     </Router>
   );
