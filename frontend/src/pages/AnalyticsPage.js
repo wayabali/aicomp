@@ -2,18 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '../styles/DashboardPage.css';
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { FaLandmark } from "react-icons/fa6";
-import { MdOutlineTimeline } from "react-icons/md";
+import { VscGraphLeft } from "react-icons/vsc";
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const DashboardPage = () => {
   const [employees, setEmployees] = useState([]);
@@ -21,104 +14,143 @@ const DashboardPage = () => {
   const [guichets, setGuichets] = useState([]);
   const [filteredGuichets, setFilteredGuichets] = useState([]);
   const [allGuichets, setAllGuichets] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
+  const [mostActiveHours, setMostActiveHours] = useState([]);
+  const [mostActiveDays, setMostActiveDays] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTimeData, setActiveTimeData] = useState({
-    labels: [],
-    datasets: [{
-      label: 'Tickets per Hour',
-      data: [],
-      backgroundColor: '#4e73df',
-      borderColor: '#4e73df',
-      borderWidth: 1,
-    }],
-  });
+  const [showPopup, setShowPopup] = useState(false);
 
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetching authentication status
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchAuthStatus = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/employees');
+        const response = await fetch('http://localhost:3001/api/auth/status', { credentials: 'include' });
         const data = await response.json();
-        setEmployees(data);
-        setFilteredEmployees(data); // Initialize with all employees
+        setIsAuthenticated(data.isAuthenticated);
+        setIsAdmin(data.role === 'admin');
       } catch (error) {
-        console.error('Error fetching employee data:', error);
+        console.error('Error fetching authentication status:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    const fetchTopGuichets = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/most-active-guichet?limit=3');
-        const data = await response.json();
-        setGuichets(data);
-        setFilteredGuichets(data); // Initialize with top 3 guichets
-      } catch (error) {
-        console.error('Error fetching guichet data:', error);
-      }
-    };
-
-    const fetchAllGuichets = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/most-active-guichet');
-        const data = await response.json();
-        setAllGuichets(data);
-      } catch (error) {
-        console.error('Error fetching all guichets:', error);
-      }
-    };
-
-    // Fetch active time data (for bar chart)
-    const fetchActiveTimeData = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/guichet-active-times');
-        const data = await response.json();
-        const labels = data.map(item => item.timeOfDay);
-        const ticketCounts = data.map(item => item.ticketCount);
-        setActiveTimeData({
-          labels: labels,
-          datasets: [{
-            label: 'Tickets per Hour',
-            data: ticketCounts,
-            backgroundColor: '#4e73df',
-            borderColor: '#4e73df',
-            borderWidth: 1,
-          }],
-        });
-      } catch (error) {
-        console.error('Error fetching active time data:', error);
-      }
-    };
-
-    fetchEmployees();
-    fetchTopGuichets();
-    fetchAllGuichets();
-    fetchActiveTimeData();
+    fetchAuthStatus();
   }, []);
+
+  // Fetch data only if authenticated and an admin
+  useEffect(() => {
+    if (isAuthenticated && isAdmin) {
+      const fetchEmployees = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/api/employees');
+          const data = await response.json();
+          setEmployees(data);
+          setFilteredEmployees(data); // Initialize with all employees
+        } catch (error) {
+          console.error('Error fetching employee data:', error);
+        }
+      };
+
+      const fetchTopGuichets = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/api/most-active-guichet?limit=3');
+          const data = await response.json();
+          setGuichets(data);
+          setFilteredGuichets(data); // Initialize with top 3 guichets
+        } catch (error) {
+          console.error('Error fetching guichet data:', error);
+        }
+      };
+
+      const fetchAllGuichets = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/api/most-active-guichet');
+          const data = await response.json();
+          setAllGuichets(data);
+        } catch (error) {
+          console.error('Error fetching all guichets:', error);
+        }
+      };
+
+      const fetchActiveTimes = async () => {
+        try {
+          const response = await fetch('http://localhost:3001/api/guichet-active-times');
+          const data = await response.json();
+          setMostActiveHours(data.most_active_time || []);
+          setMostActiveDays(data.most_active_days || []);
+        } catch (error) {
+          console.error('Error fetching active times:', error);
+        }
+      };
+
+      fetchEmployees();
+      fetchTopGuichets();
+      fetchAllGuichets();
+      fetchActiveTimes();
+    }
+  }, [isAuthenticated, isAdmin]);
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
 
-    // Filter employees
-    const filteredEmp = employees.filter((employee) =>
-      `${employee.name} ${employee.surname}`.toLowerCase().includes(query)
+    setFilteredEmployees(
+      employees.filter((employee) =>
+        `${employee.name || ''} ${employee.surname || ''}`.toLowerCase().includes(query)
+      )
     );
-    setFilteredEmployees(filteredEmp);
 
-    // Filter guichets
-    const filteredGch = guichets.filter((guichet) =>
-      guichet.name.toLowerCase().includes(query)
+    setFilteredGuichets(
+      guichets.filter((guichet) => guichet.name.toLowerCase().includes(query))
     );
-    setFilteredGuichets(filteredGch);
   };
 
-  const handleShowAll = () => {
-    setShowPopup(true);
+  const handleShowAll = () => setShowPopup(true);
+  const closePopup = () => setShowPopup(false);
+
+  const activeHoursChartData = {
+    labels: mostActiveHours.map((item) => `${item.hour}:00`),
+    datasets: [
+      {
+        label: 'Tickets',
+        data: mostActiveHours.map((item) => item.ticket_count),
+        backgroundColor: '#4e73df',
+      },
+    ],
   };
 
-  const closePopup = () => {
-    setShowPopup(false);
+  const activeDaysChartData = {
+    labels: mostActiveDays.map((item) => item.day),
+    datasets: [
+      {
+        label: 'Tickets',
+        data: mostActiveDays.map((item) => item.ticket_count),
+        backgroundColor: '#1cc88a',
+      },
+    ],
   };
+
+  const ChartSection = ({ title, data, options }) => (
+    <section className="chart-section">
+      <h2><VscGraphLeft /> {title}</h2>
+      <div className="chart-container">
+        <Bar data={data} options={options} />
+      </div>
+    </section>
+  );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated || !isAdmin) {
+    return <div>You are not authorized to view this page.</div>;
+  }
 
   return (
     <div className="dashboard-container">
@@ -138,13 +170,13 @@ const DashboardPage = () => {
             <h2><BsFillPersonLinesFill /> Employees</h2>
             <div className="employee-list">
               {filteredEmployees.length === 0 ? (
-                <p>No matching employees found.</p>
+                <p>No employees found</p>
               ) : (
                 filteredEmployees.map((employee) => (
-                  <div key={employee.id} className="employee-card">
-                    <p>Name: {employee.name} {employee.surname}</p>
-                    <p>Birth Date: {new Date(employee.birthDate).toLocaleDateString()}</p>
-                    <p>Status: {employee.status}</p>
+                  <div key={employee.id}>
+                    <p>{employee.name} {employee.surname}</p>
+                    <p>{employee.birthDate}</p>
+                    <p>{employee.status}</p>
                   </div>
                 ))
               )}
@@ -180,31 +212,49 @@ const DashboardPage = () => {
             <button className="show-all-button" onClick={handleShowAll}>Show All</button>
           </section>
 
-          <section className="most-active-time">
-            <h2><MdOutlineTimeline /> Most Active Time</h2>
-            <div className="chart-container">
-              <Bar data={activeTimeData} options={{
-                responsive: true,
-                plugins: {
-                  title: {
-                    display: true,
-                    text: 'Most Active Time for Tickets',
-                  },
-                  legend: {
-                    display: false,
-                  },
+          <ChartSection
+            title="Most Active Hours"
+            data={activeHoursChartData}
+            options={{
+              responsive: true,
+              plugins: { title: { display: true, text: 'Tickets by Hour' } },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  categoryPercentage: 0.8, // Controls space between bars (adjust to your preference)
                 },
-                scales: {
-                  x: {
-                    beginAtZero: true,
-                  },
-                  y: {
-                    beginAtZero: true,
-                  },
+                y: { beginAtZero: true },
+              },
+              elements: {
+                bar: {
+                  // Adjust the bar width here
+                  barThickness: 30, // You can adjust this number to control the width of the bars
                 },
-              }} />
-            </div>
-          </section>
+              },
+            }}
+          />
+
+          <ChartSection
+            title="Most Active Days"
+            data={activeDaysChartData}
+            options={{
+              responsive: true,
+              plugins: { title: { display: true, text: 'Tickets by Day' } },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  categoryPercentage: 0.8, // Controls space between bars (adjust to your preference)
+                },
+                y: { beginAtZero: true },
+              },
+              elements: {
+                bar: {
+                  // Adjust the bar width here
+                  barThickness: 30, // You can adjust this number to control the width of the bars
+                },
+              },
+            }}
+          />
         </div>
       </div>
 
