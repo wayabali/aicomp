@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import Layout from './components/Layout';
 import Tickets from './pages/Tickets';
 import Analytics from './pages/AnalyticsPage'
+import Settings from './pages/Settings'
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
               <Routes>
                 <Route path="/Tickets" element={<Tickets />} />
                 <Route path="/statistiques" element={<Analytics/>} />
+                <Route path="/Settings" element={<Settings/>} />
               </Routes>
             </Layout>
           }
