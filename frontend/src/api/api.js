@@ -1,22 +1,20 @@
 
+import axios from 'axios';
+
+const API_URL = 'https://hackaton-33os.onrender.com/account/login/';
+
 export const loginAdmin = async (username, password) => {
   try {
-    const response = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    const response = await axios.post(API_URL, { username, password });
+    const data = response.data;
 
-    if (!response.ok) {
-      throw new Error('Invalid credentials');
+    if (data.message === "Logged in successfully with session" && data.is_admin) {
+      return data.message; // Return the message (or a session token if available)
+    } else {
+      throw new Error(data.message || 'Login failed');
     }
-
-    const data = await response.json();
-    return data.token; // Return the authentication token
   } catch (error) {
-    throw error;
+    throw new Error(error.response?.data?.message || 'Network error');
   }
 };
 
@@ -26,14 +24,5 @@ export const logoutAdmin = () => {
 
 
 
-export const fetchCustomers = async () => {
-  try {
-    const response = await fetch('/api/customers');  
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-    throw error;
-  }
-};
+
 

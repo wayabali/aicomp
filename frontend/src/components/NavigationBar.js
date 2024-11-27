@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { isAuthenticated } from '../utils/auth';
-import { logoutAdmin } from '../api/api';
-import baridi from '../styles/baridi.png'
+import { isAuthenticated } from '../utils/auth'; // Assuming you have an isAuthenticated function
+import { logoutAdmin } from '../api/api'; // API call for logout
+import baridi from '../styles/baridi.png';
 import '../styles/NavigationBar.css';
 
+// Get user role from localStorage
 const getUserRole = () => {
-  return localStorage.getItem('userRole');   // Fares badlha alahsab databse manba3d
+  return localStorage.getItem('userRole');   // Update to fetch from your DB after user login
 };
 
 const NavigationBar = () => {
@@ -15,14 +16,14 @@ const NavigationBar = () => {
   const role = getUserRole();
 
   const handleLogout = () => {
-    logoutAdmin();
+    logoutAdmin();  // Call the logout API
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
-    navigate('/login');
+    navigate('/');  // Redirect to the login page
   };
 
   const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
+    setSidebarOpen(!isSidebarOpen);  // Toggle sidebar open/close state
   };
 
   return (
@@ -31,21 +32,19 @@ const NavigationBar = () => {
         ☰
       </button>
       <div className="sidebar-content">
-     
         <div className="logo-section">
           <img
-            src={baridi} 
+            src={baridi}
             alt="Algerie Poste Logo"
             className="sidebar-logo"
           />
         </div>
 
-        
         <ul className="sidebar-links">
           {isAuthenticated() && (
             <>
               <li>
-                <Link to="/">
+                <Link to="/tickets">
                   <i className="fas fa-home"></i> Tickets
                 </Link>
               </li>
@@ -67,7 +66,6 @@ const NavigationBar = () => {
           )}
         </ul>
 
-        
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
