@@ -1,23 +1,32 @@
-import React, { useState } from 'react'; // Import React and useState hook
-import '../styles/Reports.css'; // Import the CSS for styling
+import React, { useState } from 'react'; 
+import '../styles/Reports.css'; 
 
 function Reports() {
-  // Static data for the report
-  const [report] = useState({
-    busNumber: 'Bus 42', // Example bus number
-    stationName: 'Main Street Station', // Example station name
-    reportDetails: 'Minor delay due to traffic congestion.', // Example report details
+
+  const [report, setReport] = useState({
+    busNumber: 'Bus 42', 
+    stationName: 'Main Street Station', 
+    reportDetails: '', 
   });
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setReport((prevReport) => ({
+      ...prevReport,
+      [name]: value, 
+    }));
+  };
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Report Submitted:', report); // Log the report data (this would later be sent to a server)
+    console.log('Report Submitted:', report); 
     alert('Report submitted successfully!');
   };
 
   return (
     <div className="reports-container">
-      <h1>Bus Driver Report</h1> {/* Heading for the page */}
+      <h1>Bus Driver Report</h1> 
       <form onSubmit={handleSubmit} className="report-form">
         <div className="form-group">
           <label htmlFor="busNumber">Bus Number:</label>
@@ -26,7 +35,7 @@ function Reports() {
             id="busNumber"
             name="busNumber"
             value={report.busNumber}
-            readOnly
+            onChange={handleInputChange} 
           />
         </div>
         <div className="form-group">
@@ -36,7 +45,7 @@ function Reports() {
             id="stationName"
             name="stationName"
             value={report.stationName}
-            readOnly
+            onChange={handleInputChange} 
           />
         </div>
         <div className="form-group">
@@ -45,10 +54,11 @@ function Reports() {
             id="reportDetails"
             name="reportDetails"
             value={report.reportDetails}
-            readOnly
+            onChange={handleInputChange} 
+            placeholder="Enter the details of the report here..." 
           ></textarea>
         </div>
-        <button type="submit">Submit Report</button> {/* Button to submit the report */}
+        <button type="submit">Submit Report</button> 
       </form>
     </div>
   );
