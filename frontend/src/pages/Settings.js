@@ -13,41 +13,26 @@ const Settings = () => {
   const [isAdmin, setIsAdmin] = useState(false); // Admin status state
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
-  // Fetch authentication status and user role on component load
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        // Assuming your API returns the user's authentication status and role
-        const response = await fetch("http://localhost:3001/api/auth/status", {
-          credentials: "include", // Include cookies or other credentials if necessary
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setIsAuthenticated(data.isAuthenticated);
-          setIsAdmin(data.role === "admin"); // Assuming role comes as 'admin' or 'user'
-        } else {
-          setIsAuthenticated(false);
-          setIsAdmin(false);
-        }
-      } catch (error) {
-        console.error("Error fetching authentication status:", error);
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-      } finally {
-        setIsLoading(false); // Once the auth check is done, stop the loading
-      }
-    };
-
-    checkAuthentication();
+ useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('userRole');
+    
+    if (authToken && userRole === "admin") {
+      setIsAuthenticated(true);
+      setIsAdmin(true);
+    } else {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+    }
+    setIsLoading(false); // Set loading to false after checking authentication
   }, []);
 
-  // Handle checkbox toggle
+  // Handle checkbox toggle for distributeur status
   const handleDistributeurToggle = async () => {
     const newStatus = !distributeurStatus;
     try {
       const response = await fetch("http://localhost:3001/api/distributeur", {
-        method: "POST", // Use PUT or PATCH if preferred
+        method: "POST", // Use POST or PUT if you prefer
         headers: {
           "Content-Type": "application/json",
         },
@@ -79,7 +64,7 @@ const Settings = () => {
         },
         body: JSON.stringify(newGuichet),
       });
-  
+
       if (response.ok) {
         const addedGuichet = await response.json();
         setGuichets([...guichets, addedGuichet]); // Add new guichet to state
@@ -112,7 +97,6 @@ const Settings = () => {
   if (!isAuthenticated || !isAdmin) {
     return <div>You are not authorized to access this page.</div>;
   }
-
   return (
     <div className="Settings-container">
       <div className="search_setting_container">

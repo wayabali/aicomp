@@ -26,20 +26,17 @@ const DashboardPage = () => {
 
   // Fetching authentication status
   useEffect(() => {
-    const fetchAuthStatus = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/auth/status', { credentials: 'include' });
-        const data = await response.json();
-        setIsAuthenticated(data.isAuthenticated);
-        setIsAdmin(data.role === 'admin');
-      } catch (error) {
-        console.error('Error fetching authentication status:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchAuthStatus();
+    const authToken = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('userRole');
+    
+    if (authToken && userRole === 'admin') {
+      setIsAuthenticated(true);
+      setIsAdmin(true);
+    } else {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
+    }
+    setIsLoading(false); // Set loading to false after checking authentication
   }, []);
 
   // Fetch data only if authenticated and an admin
@@ -144,10 +141,12 @@ const DashboardPage = () => {
     </section>
   );
 
+  // Show loading screen if still loading
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // You can replace this with a loading spinner or custom message
   }
 
+  // Show "Not Authorized" page if not authenticated or not an admin
   if (!isAuthenticated || !isAdmin) {
     return <div>You are not authorized to view this page.</div>;
   }
@@ -227,8 +226,7 @@ const DashboardPage = () => {
               },
               elements: {
                 bar: {
-                  // Adjust the bar width here
-                  barThickness: 30, // You can adjust this number to control the width of the bars
+                  barThickness: 30, // Adjust this value to control the width of the bars
                 },
               },
             }}
@@ -249,8 +247,7 @@ const DashboardPage = () => {
               },
               elements: {
                 bar: {
-                  // Adjust the bar width here
-                  barThickness: 30, // You can adjust this number to control the width of the bars
+                  barThickness: 30, // Adjust this value to control the width of the bars
                 },
               },
             }}

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginAdmin } from '../api/api'; // The login API
 import '../styles/LoginPage.css';
 import imagesystem from '../styles/system.png';
 import baridilogo from '../styles/baridi.png';
@@ -17,16 +16,24 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
 
-    try {
-      const token = await loginAdmin(username, password);  
-      localStorage.setItem('authToken', token);  
-      localStorage.setItem('userRole', 'admin');  
-      navigate('/tickets');  
-    } catch (err) {
-      setError(err.message || 'Login failed'); 
-    } finally {
-      setLoading(false);
+    // Static data for authentication (mocked response)
+    const mockUser = {
+      username: 'admin', // Static username
+      password: '1234', // Static password
+      role: false, // Role for the admin user
+      authToken: 'fakeAuthToken1234', // Fake auth token for mock login
+    };
+
+    // Check if the entered username and password match the mock data
+    if (username === mockUser.username && password === mockUser.password) {
+      localStorage.setItem('authToken', mockUser.authToken);  // Store auth token
+      localStorage.setItem('userRole', mockUser.role);  // Store user role
+      navigate('/settings');  // Redirect to settings page
+    } else {
+      setError('Invalid username or password');
     }
+
+    setLoading(false);
   };
 
   return (

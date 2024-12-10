@@ -51,7 +51,7 @@ const NavigationBar = () => {
               {role === 'admin' && (
                 <>
                   <li>
-                    <Link to="/analytics">
+                    <Link to="/statistiques">
                       <i className="fas fa-chart-bar"></i> Statistiques
                     </Link>
                   </li>
