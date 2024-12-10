@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
-import imagesystem from '../styles/system.png';
-import baridilogo from '../styles/baridi.png';
+import system from '../styles/system.jpg';
+import Bus from '../styles/Bus.png';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -42,7 +42,7 @@ const LoginPage = () => {
         <div className="login-card">
           <div className="login-left">
             <div className="logo-placeholder">
-              <img src={baridilogo} alt="Algerie Poste Logo" />
+              <img src={Bus} alt="Algerie Poste Logo" />
             </div>
             <h1>WELCOME BACK</h1>
             <form onSubmit={handleLogin}>
@@ -73,7 +73,7 @@ const LoginPage = () => {
 
           <div className="login-right">
             <div className="illustration">
-              <img src={imagesystem} alt="Ticket System Illustration" />
+              <img src={system} alt="Ticket System Illustration" />
             </div>
             <h2>Ticket system</h2>
           </div>

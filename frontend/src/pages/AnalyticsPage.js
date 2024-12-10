@@ -11,15 +11,15 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const DashboardPage = () => {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
-  const [guichets, setGuichets] = useState([]);
-  const [filteredGuichets, setFilteredGuichets] = useState([]);
-  const [allGuichets, setAllGuichets] = useState([]);
+  const [Buss, setBuss] = useState([]);
+  const [filteredBuss, setFilteredBuss] = useState([]);
+  const [allBus, setallBus] = useState([]);
   const [mostActiveHours, setMostActiveHours] = useState([]);
   const [mostActiveDays, setMostActiveDays] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
-  // Authentication State
+/*  // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,60 +38,70 @@ const DashboardPage = () => {
     }
     setIsLoading(false); // Set loading to false after checking authentication
   }, []);
-
+*/
   // Fetch data only if authenticated and an admin
   useEffect(() => {
-    if (isAuthenticated && isAdmin) {
-      const fetchEmployees = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/api/employees');
-          const data = await response.json();
-          setEmployees(data);
-          setFilteredEmployees(data); // Initialize with all employees
-        } catch (error) {
-          console.error('Error fetching employee data:', error);
-        }
-      };
-
-      const fetchTopGuichets = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/api/most-active-guichet?limit=3');
-          const data = await response.json();
-          setGuichets(data);
-          setFilteredGuichets(data); // Initialize with top 3 guichets
-        } catch (error) {
-          console.error('Error fetching guichet data:', error);
-        }
-      };
-
-      const fetchAllGuichets = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/api/most-active-guichet');
-          const data = await response.json();
-          setAllGuichets(data);
-        } catch (error) {
-          console.error('Error fetching all guichets:', error);
-        }
-      };
-
-      const fetchActiveTimes = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/api/guichet-active-times');
-          const data = await response.json();
-          setMostActiveHours(data.most_active_time || []);
-          setMostActiveDays(data.most_active_days || []);
-        } catch (error) {
-          console.error('Error fetching active times:', error);
-        }
-      };
-
-      fetchEmployees();
-      fetchTopGuichets();
-      fetchAllGuichets();
-      fetchActiveTimes();
-    }
-  }, [isAuthenticated, isAdmin]);
-
+    const fetchEmployees = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/employees');
+        
+        // Afficher la réponse brute
+        const text = await response.text(); 
+        console.log('Raw response:', text);  // Log la réponse brute dans la console
+    
+        // Vérifier si la réponse est un JSON valide
+        const data = JSON.parse(text);
+        setEmployees(data);
+        setFilteredEmployees(data);
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+      }
+    };
+    
+    
+  
+    const fetchTopBuss = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/most-active-Bus?limit=3');
+        const text = await response.text();
+        console.log('Raw Bus response:', text);
+        const data = JSON.parse(text);
+        setBuss(data);
+        setFilteredBuss(data);
+      } catch (error) {
+        console.error('Error fetching Bus data:', error);
+      }
+    };
+    
+    // Répétez cette opération pour fetchAllBus et fetchActiveTimes
+    
+    const fetchAllBus = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/most-active-Bus');
+        const data = await response.json();
+        setallBus(data);
+      } catch (error) {
+        console.error('Error fetching all Buss:', error);
+      }
+    };
+  
+    const fetchActiveTimes = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/Bus-active-times');
+        const data = await response.json();
+        setMostActiveHours(data.most_active_time || []);
+        setMostActiveDays(data.most_active_days || []);
+      } catch (error) {
+        console.error('Error fetching active times:', error);
+      }
+    };
+  
+    fetchEmployees();
+    fetchTopBuss();
+    fetchAllBus();
+    fetchActiveTimes();
+  }, []);
+  
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
@@ -102,30 +112,30 @@ const DashboardPage = () => {
       )
     );
 
-    setFilteredGuichets(
-      guichets.filter((guichet) => guichet.name.toLowerCase().includes(query))
+    setFilteredBuss(
+      Buss.filter((Bus) => Bus.name.toLowerCase().includes(query))
     );
   };
 
   const handleShowAll = () => setShowPopup(true);
   const closePopup = () => setShowPopup(false);
 
-  const activeHoursChartData = {
+  const ActiveStationChartData = {
     labels: mostActiveHours.map((item) => `${item.hour}:00`),
     datasets: [
       {
-        label: 'Tickets',
+        label: 'Students',
         data: mostActiveHours.map((item) => item.ticket_count),
         backgroundColor: '#4e73df',
       },
     ],
   };
 
-  const activeDaysChartData = {
+  const Station_awaitedChartData = {
     labels: mostActiveDays.map((item) => item.day),
     datasets: [
       {
-        label: 'Tickets',
+        label: 'students',
         data: mostActiveDays.map((item) => item.ticket_count),
         backgroundColor: '#1cc88a',
       },
@@ -141,15 +151,7 @@ const DashboardPage = () => {
     </section>
   );
 
-  // Show loading screen if still loading
-  if (isLoading) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner or custom message
-  }
-
-  // Show "Not Authorized" page if not authenticated or not an admin
-  if (!isAuthenticated || !isAdmin) {
-    return <div>You are not authorized to view this page.</div>;
-  }
+ 
 
   return (
     <div className="dashboard-container">
@@ -184,25 +186,25 @@ const DashboardPage = () => {
         </div>
 
         <div className="right-column">
-          <section className="most-active-guichet">
-            <h2><FaLandmark /> Most Active Guichet</h2>
-            {filteredGuichets.length === 0 ? (
-              <p>No matching guichets found.</p>
+          <section className="active-bus">
+            <h2><FaLandmark />  Bus Active</h2>
+            {filteredBuss.length === 0 ? (
+              <p>No matching Bus found.</p>
             ) : (
               <table>
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Tickets</th>
-                    <th>Percentage</th>
+                    <th>Chauffeur</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredGuichets.map((guichet, index) => (
+                  {filteredBuss.map((bus, index) => (
                     <tr key={index}>
-                      <td>{guichet.name}</td>
-                      <td>{guichet.tickets}</td>
-                      <td>{guichet.percentage}%</td>
+                      <td>{bus.name}</td>
+                      <td>{bus.chauffeur}</td>
+                      
                     </tr>
                   ))}
                 </tbody>
@@ -210,13 +212,14 @@ const DashboardPage = () => {
             )}
             <button className="show-all-button" onClick={handleShowAll}>Show All</button>
           </section>
+          
 
           <ChartSection
-            title="Most Active Hours"
-            data={activeHoursChartData}
+            title="Most Active Station"
+            data={ActiveStationChartData}
             options={{
               responsive: true,
-              plugins: { title: { display: true, text: 'Tickets by Hour' } },
+              plugins: { title: { display: true, text: 'Students by hours' } },
               scales: {
                 x: {
                   beginAtZero: true,
@@ -226,18 +229,18 @@ const DashboardPage = () => {
               },
               elements: {
                 bar: {
-                  barThickness: 30, // Adjust this value to control the width of the bars
+                  barThickness: 20, // Adjust this value to control the width of the bars
                 },
               },
             }}
           />
 
           <ChartSection
-            title="Most Active Days"
-            data={activeDaysChartData}
+            title="Most Station awaited "
+            data={Station_awaitedChartData}
             options={{
               responsive: true,
-              plugins: { title: { display: true, text: 'Tickets by Day' } },
+              plugins: { title: { display: true, text: ' awaited student by hours' } },
               scales: {
                 x: {
                   beginAtZero: true,
@@ -247,7 +250,7 @@ const DashboardPage = () => {
               },
               elements: {
                 bar: {
-                  barThickness: 30, // Adjust this value to control the width of the bars
+                  barThickness: 10, // Adjust this value to control the width of the bars
                 },
               },
             }}
@@ -258,11 +261,11 @@ const DashboardPage = () => {
       {showPopup && (
         <div className="popup-overlay" onClick={closePopup}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <h3>All Guichets</h3>
+            <h3>All Bus</h3>
             <ul>
-              {allGuichets.map((guichet, index) => (
+              {allBus.map((Bus, index) => (
                 <li key={index}>
-                  <FaLandmark /> {guichet.name} - {guichet.ticketCount} Tickets
+                  <FaLandmark /> {Bus.name} - {Bus.etudiantCount} Tickets
                 </li>
               ))}
             </ul>

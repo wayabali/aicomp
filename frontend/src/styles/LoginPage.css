@@ -1,7 +1,7 @@
 .body-login {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #003d99;
+  background-color: rgb(86, 214, 90);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,7 +13,7 @@
   max-width: 900px;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #003d99;
+  background-color: rgb(86, 214, 90);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,7 +72,7 @@ form input {
 }
 
 .login-button {
-  background-color: #fbbd08;
+  background-color: #070707;
   color: #ffffff;
   border: none;
   padding: 10px 20px;
@@ -84,7 +84,8 @@ form input {
 }
 
 .login-button:hover {
-  background-color: #e3a706;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .login-right {
