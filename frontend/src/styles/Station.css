@@ -1,0 +1,44 @@
+body {
+  font-family: Arial, sans-serif; /* Set font family for the page */
+  background-color: #f4f4f4; /* Set background color for the page */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+}
+
+.stations-container {
+  text-align: center; /* Center the text and content */
+  padding: 20px; /* Add padding around the container */
+}
+
+h1 {
+  color: #333; /* Dark color for the main heading */
+}
+
+.stations-list {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap to the next row */
+  justify-content: center; /* Center the cards horizontally */
+  gap: 20px; /* Add space between cards */
+  margin-top: 20px; /* Add space above the list */
+}
+
+.station-card {
+  background-color: #fff; /* White background for the card */
+  padding: 20px;
+  border-radius: 8px; /* Rounded corners for the card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  width: 250px; /* Fixed width for each card */
+  text-align: left; /* Align text to the left inside the card */
+}
+
+h2 {
+  font-size: 18px; /* Set font size for station name */
+  color: #4CAF50; /* Green color for station name */
+  margin-bottom: 10px; /* Add space below the station name */
+}
+
+p {
+  font-size: 14px; /* Set font size for details */
+  color: #555; /* Dark grey color for details */
+  margin: 5px 0; /* Add space between details */
+}

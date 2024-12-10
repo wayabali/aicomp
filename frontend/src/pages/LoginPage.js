@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
-import imagesystem from '../styles/system.png';
-import baridilogo from '../styles/baridi.png';
+import imagesystem from '../styles/system.jpg';
+import buses from '../styles/Bus.png';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -16,15 +16,13 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
 
-    // Static data for authentication (mocked response)
     const mockUser = {
-      username: 'admin', // Static username
-      password: '1234', // Static password
-      role: false, // Role for the admin user
-      authToken: 'fakeAuthToken1234', // Fake auth token for mock login
+      username: 'admin', 
+      password: '1234', 
+      role: false, 
+      authToken: 'fakeAuthToken1234', 
     };
 
-    // Check if the entered username and password match the mock data
     if (username === mockUser.username && password === mockUser.password) {
       localStorage.setItem('authToken', mockUser.authToken);  // Store auth token
       localStorage.setItem('userRole', mockUser.role);  // Store user role
@@ -42,7 +40,7 @@ const LoginPage = () => {
         <div className="login-card">
           <div className="login-left">
             <div className="logo-placeholder">
-              <img src={baridilogo} alt="Algerie Poste Logo" />
+              <img src={buses} alt="buses logo" />
             </div>
             <h1>WELCOME BACK</h1>
             <form onSubmit={handleLogin}>
@@ -75,7 +73,7 @@ const LoginPage = () => {
             <div className="illustration">
               <img src={imagesystem} alt="Ticket System Illustration" />
             </div>
-            <h2>Ticket system</h2>
+            <h2>Buses system</h2>
           </div>
         </div>
       </div>

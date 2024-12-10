@@ -2,9 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Layout from './components/Layout';
-import Tickets from './pages/Tickets';
+import Station from './pages/Station';
 import Analytics from './pages/AnalyticsPage'
 import Settings from './pages/Settings'
+import Report from './pages/Report';
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
           element={
             <Layout>
               <Routes>
-                <Route path="/Tickets" element={<Tickets />} />
+                <Route path="/Station" element={<Station />} />
+                <Route path="/Reports" element={<Report />} />
                 <Route path="/statistiques" element={<Analytics/>} />
                 <Route path="/Settings" element={<Settings/>} />
               </Routes>
