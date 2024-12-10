@@ -5,20 +5,20 @@ import BusDetails from '../components/BusDetails';
 function Station() {
   const [stations] = useState([
     {
-      name: 'Main Street Station', 
+      name: 'STATION 2', 
       address: '123 Main St', 
       peopleWaiting: 15, 
       max_places : 8 
     },
     {
-      name: 'Central Park Station',
-      address: '456 Park Ave',
+      name: 'STATION 1',
+      address: '456 Park ',
       peopleWaiting: 25,
       max_places : 16
     },
     {
-      name: 'Downtown Station',
-      address: '789 Broadway',
+      name: 'STATION 3',
+      address: '789 chikhi',
       peopleWaiting: 10,
       max_places : 4
     },
