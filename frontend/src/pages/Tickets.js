@@ -1,119 +1,49 @@
-import React, { useEffect, useState } from "react";
-import NextButton from "../components/NextButton";
-import PreceButton from "../components/PreceButton";
-import "../styles/Ticket.css";
+import React, { useState } from 'react'; // Import React and useState hook
+import '../styles/BusStations.css'; // Import the CSS for styling
 
-const Tickets = () => {
-  const [ticketNumber, setTicketNumber] = useState(null);
-  const [ticketInfo, setTicketInfo] = useState(null);
-  
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication state
-  const [isAdmin, setIsAdmin] = useState(false); // Admin status state
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+function Station() {
+  const [stations] = useState([ // Static data for multiple bus stations
+    {
+      name: 'Main Street Station', // Name of the bus station
+      address: '123 Main St', // Address of the bus station
+      peopleWaiting: 15, // Number of people waiting
+    },
+    {
+      name: 'Central Park Station',
+      address: '456 Park Ave',
+      peopleWaiting: 25,
+    },
+    {
+      name: 'Downtown Station',
+      address: '789 Broadway',
+      peopleWaiting: 10,
+    },
+  ]);
 
-  const currentTicketUrl = "https://hackaton-33os.onrender.com/ticket/TicketAdmin/";
-  const updateTicketUrl = "https://hackaton-33os.onrender.com/ticket/TicketAdmin/";
-
-  useEffect(() => {
-    // Fetch authentication and role status
-    const authToken = localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('userRole');
-    
-    if (authToken && userRole) {
-      setIsAuthenticated(true);
-      setIsAdmin(userRole === "admin");
-    } else {
-      setIsAuthenticated(false);
-      setIsAdmin(false);
-    }
-    setIsLoading(false); // Set loading to false after checking authentication
-
-    // Fetch current ticket number
-    fetch(currentTicketUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setTicketNumber(data.nmr);
-        setTicketInfo({
-          name: data.name,
-          operationType: data.ticket_type,
-          handicap: data.handicap,
-        });
-      })
-      .catch((error) => console.error("Error fetching current ticket:", error));
-  }, []);
-
-  const updateTicket = (direction) => {
-    if (ticketNumber === null) return;
-
-    const newTicketNumber = direction === "next" ? ticketNumber + 1 : ticketNumber - 1;
-
-    if (newTicketNumber < 1) return;
-
-    fetch(updateTicketUrl, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ number: newTicketNumber }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTicketNumber(data.nmr);
-        setTicketInfo({
-          name: data.name,
-          operationType: data.ticket_type,
-          handicap: data.handicap,
-        });
-      })
-      .catch((error) => console.error("Error updating ticket:", error));
-  };
-
-  const handleNext = () => updateTicket("next");
-  const handlePrevious = () => updateTicket("previous");
-
-  // Show loading screen if still loading
-  if (isLoading) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner or custom message
-  }
-
-  // Show "Not Authorized" page if not authenticated
-  if (!isAuthenticated) {
-    return <div>You are not authenticated. Please log in.</div>;
-  }
+  const [currentStation, setCurrentStation] = useState(stations[0]); // Set the current station (initially the first one)
 
   return (
-    <div>
-      <div className="ticket-container">
-        <h1>CURRENT TICKET</h1>
-        <div className="number-container">
-          <div className="number">
-            <p>{ticketNumber !== null ? ticketNumber : "Loading..."}</p>
+    <div className="stations-container">
+      <h1>Bus Stations</h1> {/* Heading for the page */}
+      
+      {/* Display the current bus station larger */}
+      <div className="current-station">
+        <h2>{currentStation.name}</h2> {/* Display the name of the current bus station */}
+        <p>Address: {currentStation.address}</p> {/* Display the address */}
+        <p>People Waiting: {currentStation.peopleWaiting}</p> {/* Display the number of people waiting */}
+      </div>
+      
+      {/* List other stations */}
+      <div className="stations-list">
+        {stations.map((station, index) => (
+          <div key={index} className="station-card" onClick={() => setCurrentStation(station)}>
+            <h2>{station.name}</h2> {/* Display the name of the bus station */}
+            <p>People Waiting: {station.peopleWaiting}</p> {/* Display the number of people waiting */}
           </div>
-        </div>
-        <div className="informations">
-          {ticketInfo ? (
-            <>
-              <p>Nom : {ticketInfo.name}</p>
-              <p>Type de l'opération : {ticketInfo.operationType}</p>
-              <p>Handicap : {ticketInfo.handicap ? "Oui" : "Non"}</p>
-            </>
-          ) : (
-            <p>Loading information...</p>
-          )}
-        </div>
-
-        {/* Show the buttons only if the user is an admin */}
-        {isAdmin ? (
-          <div>
-            <PreceButton onClick={handlePrevious} />
-            <NextButton onClick={handleNext} />
-          </div>
-        ) : (
-          <div>
-            <p>You are authenticated but do not have admin privileges to manage tickets.</p>
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );
-};
+}
 
-export default Tickets;
+export default Station;
