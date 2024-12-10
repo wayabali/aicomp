@@ -4,7 +4,6 @@ import LoginPage from './pages/LoginPage';
 import Layout from './components/Layout';
 import Station from './pages/Station';
 import Analytics from './pages/AnalyticsPage'
-import Settings from './pages/Settings'
 import Report from './pages/Report';
 
 const App = () => {
@@ -21,7 +20,6 @@ const App = () => {
                 <Route path="/Station" element={<Station />} />
                 <Route path="/Reports" element={<Report />} />
                 <Route path="/statistiques" element={<Analytics/>} />
-                <Route path="/Settings" element={<Settings/>} />
               </Routes>
             </Layout>
           }

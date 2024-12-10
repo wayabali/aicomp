@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; 
 import '../styles/Station.css'; 
+import BusDetails from '../components/BusDetails';
 
 function Station() {
   const [stations] = useState([
@@ -34,6 +35,7 @@ function Station() {
         <p>Address: {currentStation.address}</p> 
         <p>People Waiting: {currentStation.peopleWaiting}</p> 
       </div>
+      <BusDetails/>
       
       <div className="stations-list">
         {stations.map((station, index) => (
