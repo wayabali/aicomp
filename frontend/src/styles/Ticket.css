@@ -1,37 +1,57 @@
-body{
-  background: radial-gradient(circle, #F4F4F4 0%, #F3E4FF 100%);  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+body {
+  font-family: Arial, sans-serif; /* Set font family for the page */
+  background-color: #f4f4f4; /* Set background color for the page */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
 }
 
-.ticket-container{
-  display:grid;
-  justify-content: center;
-  align-items: center;
-  justify-items: center;
-  height: 100vh;
-  text-align: center;
+.stations-container {
+  text-align: center; /* Center the text and content */
+  padding: 20px; /* Add padding around the container */
 }
-.ticket-container  h1{
-  font-style:initial;
-  font-size: 36px;
-  font-weight: bold;
-  font-family:Arial, Helvetica, sans-serif ;
+
+h1 {
+  color: #333; /* Dark color for the main heading */
 }
-.number-container{
-  background: radial-gradient(circle, #F4F4F4 0%, #F3E4FF 100%);  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  border-radius: 50%;
-  color: rgb(0, 0, 0);
-  width: 180px;
-  box-shadow:#D9D9D9;
- justify-items: center;
- box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+.current-station {
+  background-color: #fff; /* White background for the current station */
+  padding: 30px;
+  border-radius: 8px; /* Rounded corners for the current station */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  margin-bottom: 30px; /* Add space below the current station */
 }
-.number{
-  color: rgb(0, 0, 0);
-  width: fit-content;
-  font-size: 55px;
-  box-shadow:#D9D9D9;
+
+.stations-list {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap to the next row */
+  justify-content: center; /* Center the cards horizontally */
+  gap: 20px; /* Add space between cards */
+  margin-top: 20px; /* Add space above the list */
 }
-.informations{
-  text-align: start;
-  font-size: 25px;
-font-family: sans-serif;}
+
+.station-card {
+  background-color: #fff; /* White background for the card */
+  padding: 20px;
+  border-radius: 8px; /* Rounded corners for the card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  width: 250px; /* Fixed width for each card */
+  text-align: left; /* Align text to the left inside the card */
+  cursor: pointer; /* Show a pointer cursor on hover */
+}
+
+.station-card:hover {
+  background-color: #e0f7fa; /* Change background on hover */
+}
+
+h2 {
+  font-size: 18px; /* Set font size for station name */
+  color: #4CAF50; /* Green color for station name */
+  margin-bottom: 10px; /* Add space below the station name */
+}
+
+p {
+  font-size: 14px; /* Set font size for details */
+  color: #555; /* Dark grey color for details */
+  margin: 5px 0; /* Add space between details */
+}
